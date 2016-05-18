@@ -99,8 +99,8 @@ cdef class Rectangle(PointGenerator):
     """
     Generates a random Point3D on a rectangle.
 
-    :param double width: The width of the rectangular sampling area of this observer.
-    :param double height: The height of the rectangular sampling area of this observer.
+    :param double width: The width of the rectangular sampling area of this observer measured along local x-axis.
+    :param double height: The height of the rectangular sampling area of this observer measured along local y-axis.
     """
 
     def __init__(self, width=1, height=1):

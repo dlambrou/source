@@ -30,8 +30,8 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from raysect.optical.observer.sensor import NonImaging
-from raysect.optical.observer.point_generator import Disk
-from raysect.optical.observer.vector_generators import ConeUniform
+from raysect.optical.observer.point_generator import Disk, Rectangle
+from raysect.optical.observer.vector_generators import ConeUniform, HemisphereCosine
 from raysect.core import AffineMatrix3D, Point3D, Vector3D
 
 
@@ -63,7 +63,7 @@ class FibreOptic(NonImaging):
     which will be sampled over.
     """
     def __init__(self, acceptance_angle=10, radius=0.001, sensitivity=1.0, spectral_samples=512,
-                 spectral_rays=1, pixel_samples=1, parent=None, transform=AffineMatrix3D(), name=""):
+                 spectral_rays=1, pixel_samples=50, parent=None, transform=AffineMatrix3D(), name=""):
 
         super().__init__(sensitivity=sensitivity, spectral_samples=spectral_samples, spectral_rays=spectral_rays,
                          pixel_samples=pixel_samples, parent=parent, transform=transform, name=name)
@@ -90,5 +90,42 @@ class FibreOptic(NonImaging):
             weight = directions[n].z
             ray = ray_template.copy(origins[n], directions[n])
             rays.append((ray, weight))
+
+        return rays
+
+
+class Pixel(NonImaging):
+    """
+    A pixel observer that samples rays from a hemisphere over a rectangular surface area.
+
+    Inherits arguments and attributes from the base NonImaging sensor class. Rays are sampled over a rectangular area at
+    the surface of the pixel and sampled over a hemispherical solid angle.
+
+    :param float acceptance_angle: The angle in degrees between the z axis and the cone surface which defines the fibres
+    soild angle sampling area.
+    :param float radius: The radius of the fibre tip in metres. This radius defines a circular area at the fibre tip
+    which will be sampled over.
+    """
+    def __init__(self, width=0.001, height=0.001, sensitivity=1.0, spectral_samples=512,
+                 spectral_rays=1, pixel_samples=100, parent=None, transform=AffineMatrix3D(), name=""):
+
+        super().__init__(sensitivity=sensitivity, spectral_samples=spectral_samples, spectral_rays=spectral_rays,
+                         pixel_samples=pixel_samples, parent=parent, transform=transform, name=name)
+
+        self.width = width
+        self.height = height
+
+    def _generate_rays(self, ray_template):
+
+        point_generator = Rectangle(self.width, self.height)
+        origins = point_generator(self.pixel_samples)
+        vector_generator = HemisphereCosine()
+        directions = vector_generator(self.pixel_samples)
+
+        rays = []
+        for n in range(self.pixel_samples):
+
+            ray = ray_template.copy(origins[n], directions[n])
+            rays.append((ray, 1.0))
 
         return rays
