@@ -36,9 +36,9 @@ from libc.math cimport M_PI, sqrt, fabs, atan, cos, sin
 cimport cython
 
 
-cdef class Conductor(Material):
+cdef class PerfectConductor(Material):
     """
-    Conductor material.
+    Perfect Conductor material.
 
     The conductor material simulates the interaction of light with a
     homogeneous conducting material, such as, gold, silver or aluminium.
@@ -187,7 +187,7 @@ cdef class RoughConductor(ContinuousBSDF):
             return 0.0
 
         s_half = s_half.normalise()
-        return 0.25 * self._d(s_half) * fabs(s_half.z / s_outgoing.dot(s_half))
+        return 0.25 * self._d(s_half, self._roughness) * fabs(s_half.z / s_outgoing.dot(s_half))
 
     @cython.cdivision(True)
     cpdef Vector3D sample(self, Vector3D s_incoming, bint back_face):
@@ -247,17 +247,20 @@ cdef class RoughConductor(ContinuousBSDF):
         reflected = ray.spawn_daughter(w_reflection_origin, s_outgoing.transform(surface_to_world))
         spectrum = reflected.trace(world)
 
+        cdef double w = (self._d(s_half, self._roughness) * self._g(s_incoming, s_outgoing) / (4 * s_incoming.z)) / self.pdf(s_incoming, s_outgoing, back_face)
+        if w > 5: print("weight: ", w)
+
         # evaluate lighting with Cook-Torrance bsdf (optimised)
-        spectrum.mul_scalar(self._d(s_half) * self._g(s_incoming, s_outgoing) / (4 * s_incoming.z))
+        spectrum.mul_scalar(self._d(s_half, self._roughness) * self._g(s_incoming, s_outgoing) / (4 * s_incoming.z))
         return self._f(spectrum, s_outgoing, s_half)
 
     @cython.cdivision(True)
-    cdef inline double _d(self, Vector3D s_half):
+    cdef inline double _d(self, Vector3D s_half, double roughness):
 
         cdef double r2, h2, k
 
         # ggx distribution
-        r2 = self._roughness * self._roughness
+        r2 = roughness * roughness
         h2 = s_half.z * s_half.z
         k = h2 * (r2 - 1) + 1
         return r2 / (M_PI * k * k)

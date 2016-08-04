@@ -37,10 +37,10 @@ from os import path
 import json
 from numpy import array
 from raysect.optical import InterpolatedSF
-from raysect.optical.material import Conductor
+from raysect.optical.material import PerfectConductor
 
 
-class _DataLoader(Conductor):
+class _DataLoader(PerfectConductor):
 
     def __init__(self, filename):
 

@@ -1,7 +1,7 @@
 from raysect.optical import World, Node, translate, rotate, Point3D, d65_white, ConstantSF, InterpolatedSF
 from raysect.optical.observer import PinholeCamera
 from raysect.optical.material.emitter import UniformSurfaceEmitter
-from raysect.optical.material.dielectric import Dielectric
+from raysect.optical.material.dielectric import PerfectDielectric
 from raysect.primitive import Sphere, Box
 from matplotlib.pyplot import *
 from numpy import array
@@ -16,12 +16,12 @@ yellow_attn = array([0.0, 0.0, 1.0, 1.0, 1.0, 1.0]) * 0.85
 cyan_attn = array([1.0, 1.0, 1.0, 1.0, 0.0, 0.0]) * 0.85
 purple_attn = array([1.0, 1.0, 0.0, 0.0, 1.0, 1.0]) * 0.95
 
-red_glass = Dielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, red_attn))
-green_glass = Dielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, green_attn))
-blue_glass = Dielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, blue_attn))
-yellow_glass = Dielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, yellow_attn))
-cyan_glass = Dielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, cyan_attn))
-purple_glass = Dielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, purple_attn))
+red_glass = PerfectDielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, red_attn))
+green_glass = PerfectDielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, green_attn))
+blue_glass = PerfectDielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, blue_attn))
+yellow_glass = PerfectDielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, yellow_attn))
+cyan_glass = PerfectDielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, cyan_attn))
+purple_glass = PerfectDielectric(index=ConstantSF(1.4), transmission=InterpolatedSF(wavelengths, purple_attn))
 
 Sphere(1000, world, material=UniformSurfaceEmitter(d65_white, 1.0))
 

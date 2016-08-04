@@ -39,7 +39,7 @@ cdef class Sellmeier(NumericallyIntegratedSF):
         double c1, c2, c3
 
 
-cdef class Dielectric(Material):
+cdef class PerfectDielectric(Material):
 
     cdef:
         public SpectralFunction index

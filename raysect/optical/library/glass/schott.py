@@ -2,7 +2,7 @@ from os import path
 import csv
 from collections import namedtuple
 from numpy import array
-from raysect.optical.material import Dielectric, Sellmeier
+from raysect.optical.material import PerfectDielectric, Sellmeier
 from raysect.optical.spectralfunction import InterpolatedSF
 
 _sellmeier_disp = namedtuple("sellmeier_dispersion", ["B1", "B2", "B3", "C1", "C2", "C3"])
@@ -56,7 +56,7 @@ class Schott():
 
         b1, b2, b3, c1, c2, c3 = chosen_glass.sellmeier
         wavelengths, transmission = chosen_glass.taui25
-        return Dielectric(index=Sellmeier(b1, b2, b3, c1, c2, c3), transmission=InterpolatedSF(wavelengths, transmission))
+        return PerfectDielectric(index=Sellmeier(b1, b2, b3, c1, c2, c3), transmission=InterpolatedSF(wavelengths, transmission))
 
     def list(self):
         return self._schott_glass_data.keys()

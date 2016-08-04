@@ -6,7 +6,7 @@ import time
 # Internal imports
 from raysect.optical import World, translate, rotate, Point3D, d65_white, ConstantSF, Node
 from raysect.optical.observer import PinholeCamera
-from raysect.optical.material.dielectric import Sellmeier, Dielectric
+from raysect.optical.material.dielectric import Sellmeier, PerfectDielectric
 from raysect.optical.material.emitter import UniformVolumeEmitter
 from raysect.optical.material import Lambert
 from raysect.primitive import Box, Subtract
@@ -26,7 +26,7 @@ Bunny model source:
 """
 
 # DIAMOND MATERIAL
-diamond = Dielectric(Sellmeier(0.3306, 4.3356, 0.0, 0.1750**2, 0.1060**2, 0.0), ConstantSF(1.0))
+diamond = PerfectDielectric(Sellmeier(0.3306, 4.3356, 0.0, 0.1750**2, 0.1060**2, 0.0), ConstantSF(1.0))
 
 world = World()
 

@@ -31,8 +31,8 @@ from .material import Material, NullSurface, NullVolume, ContinuousBSDF
 from .emitter import UniformSurfaceEmitter, UniformVolumeEmitter, VolumeEmitterHomogeneous, VolumeEmitterInhomogeneous, Checkerboard
 from .absorber import AbsorbingSurface
 from .lambert import Lambert
-from .dielectric import Dielectric, Sellmeier
-from .conductor import Conductor, RoughConductor
+from .dielectric import PerfectDielectric, Sellmeier
+from .conductor import PerfectConductor, RoughConductor
 from .modifiers import Roughen
 
 

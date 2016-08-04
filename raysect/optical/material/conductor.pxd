@@ -35,7 +35,7 @@ from raysect.optical cimport Vector3D, Spectrum
 
 
 
-cdef class Conductor(Material):
+cdef class PerfectConductor(Material):
 
     cdef:
         public SpectralFunction index
@@ -51,7 +51,7 @@ cdef class RoughConductor(ContinuousBSDF):
         public SpectralFunction extinction
         double _roughness
 
-    cdef inline double _d(self, Vector3D s_half)
+    cdef inline double _d(self, Vector3D s_half, double roughness)
 
     cdef inline double _g(self, Vector3D s_incoming, Vector3D s_outgoing)
 

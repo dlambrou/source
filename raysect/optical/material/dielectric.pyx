@@ -69,7 +69,7 @@ cdef class Sellmeier(NumericallyIntegratedSF):
 
 
 # TODO: consider carefully the impact of changes made to support mesh normal interpolation
-cdef class Dielectric(Material):
+cdef class PerfectDielectric(Material):
 
     def __init__(self, SpectralFunction index, SpectralFunction transmission, SpectralFunction external_index=None, bint transmission_only=False):
 
